@@ -339,11 +339,11 @@
     "yocto-queue": "^0.1.0"
   },
   "scripts": {
-       "build": "tsc",
+    "build": "tsc",
     "start": "node ./dist/server.js",
     "dev": "ts-node src/server.ts",
     "test": "jest --coverage",
-     "lint": "eslint . --ext .ts,.tsx,.js"
+    "lint": "eslint . --ext .ts,.tsx,.js"
   },
   "repository": {
     "type": "git",
@@ -359,6 +359,7 @@
   "devDependencies": {
     "@types/express": "^5.0.4",
     "@types/jest": "^30.0.0",
+    "@types/morgan": "^1.9.10",
     "@types/node": "^24.9.1",
     "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^8.46.2",
