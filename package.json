@@ -1,0 +1,43 @@
+{
+  "name": "employee-directory-branch-management-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node ./dist/server.js",
+    "dev": "ts-node src/server.ts",
+    "test": "jest --coverage",
+    "lint": "eslint . --ext .ts,.js",
+    "watch": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sahilchoudhary20/employee-directory-branch-management-API.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sahilchoudhary20/employee-directory-branch-management-API/issues"
+  },
+  "homepage": "https://github.com/Sahilchoudhary20/employee-directory-branch-management-API#readme",
+  "dependencies": {
+    "@types/express": "^5.0.4",
+    "express": "^5.1.0",
+    "morgan": "^1.10.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.9.1",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/parser": "^8.46.2",
+    "eslint": "^9.38.0",
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
