@@ -1,4 +1,3 @@
-// src/app.ts
 import express from "express";
 import morgan from "morgan";
 import employeeRoutes from "./api/v1/routes/employeeRoutes";
