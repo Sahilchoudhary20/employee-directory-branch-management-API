@@ -25,7 +25,7 @@ describe("Employee Routes", () => {
     const list = await request(app).get("/api/v1/employees");
     const firstId = list.body[0]?.id ?? 1;
     const res = await request(app).get(`/api/v1/employees/${firstId}`);
-    expect([200,404]).toContain(res.status); // accept either depending on data
+    expect([200,404]).toContain(res.status); // accept depending on data
   });
 
 });
