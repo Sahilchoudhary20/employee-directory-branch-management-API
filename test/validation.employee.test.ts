@@ -1,5 +1,5 @@
+// test/validation.employee.test.ts
 import { createEmployeeSchema } from "../src/api/v1/validation/employeeSchema";
-import Joi from "joi";
 
 describe("Employee validation schema", () => {
   it("validates a correct employee payload", () => {
