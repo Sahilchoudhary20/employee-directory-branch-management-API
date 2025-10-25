@@ -1,96 +1,38 @@
-import { Request, Response } from "express";
-import * as service from "../services/employeeService";
-import { SuccessResponse, ErrorResponse } from "../models/responseModel";
+// src/api/v1/services/branchService.ts
+import { Branch } from "../models/branchModel";
+import { branchRepo } from "../repositories/branchRepository";
 
-// Create new employee
-export const create = async (req: Request, res: Response) => {
-  try {
-    const created = await service.createEmployee(req.body);
-    const out: SuccessResponse<typeof created> = { success: true, data: created };
-    return res.status(201).json(out);
-  } catch (err: any) {
-    const out: ErrorResponse = { success: false, error: err.message || "Server error" };
-    return res.status(500).json(out);
-  }
+/**
+ * Branch service - unwraps repository results and returns raw
+ * Branch objects (or booleans) as tests/controllers expect.
+ */
+
+export const getAllBranches = async (): Promise<Branch[]> => {
+  const res = await branchRepo.getAll();
+  if (!res.success) throw new Error(res.error || "Failed to fetch branches");
+  return (res.data as Branch[]) || [];
 };
 
-// Get all employees
-export const getAll = async (req: Request, res: Response) => {
-  try {
-    const employees = await service.getAllEmployees();
-    const out: SuccessResponse<typeof employees> = { success: true, data: employees };
-    return res.status(200).json(out);
-  } catch (err: any) {
-    const out: ErrorResponse = { success: false, error: err.message || "Server error" };
-    return res.status(500).json(out);
-  }
+export const getBranchById = async (id: string): Promise<Branch | null> => {
+  const res = await branchRepo.getById(id);
+  if (!res.success) throw new Error(res.error || "Failed to fetch branch");
+  return (res.data as Branch) || null;
 };
 
-// Get employee by ID
-export const getById = async (req: Request, res: Response) => {
-  try {
-    const employee = await service.getEmployeeById(req.params.id);
-    if (!employee) {
-      return res.status(404).json({ success: false, error: "Employee not found" });
-    }
-    const out: SuccessResponse<typeof employee> = { success: true, data: employee };
-    return res.status(200).json(out);
-  } catch (err: any) {
-    const out: ErrorResponse = { success: false, error: err.message || "Server error" };
-    return res.status(500).json(out);
-  }
+export const createBranch = async (payload: Omit<Branch, "id">): Promise<Branch> => {
+  const res = await branchRepo.create(payload as Branch);
+  if (!res.success) throw new Error(res.error || "Failed to create branch");
+  return res.data as Branch;
 };
 
-// Update employee
-export const update = async (req: Request, res: Response) => {
-  try {
-    const updated = await service.updateEmployee(req.params.id, req.body);
-    if (!updated) {
-      return res.status(404).json({ success: false, error: "Employee not found" });
-    }
-    const out: SuccessResponse<typeof updated> = { success: true, data: updated };
-    return res.status(200).json(out);
-  } catch (err: any) {
-    const out: ErrorResponse = { success: false, error: err.message || "Server error" };
-    return res.status(500).json(out);
-  }
+export const updateBranch = async (id: string, patch: Partial<Omit<Branch, "id">>): Promise<Branch | null> => {
+  const res = await branchRepo.update(id, patch as Partial<Branch>);
+  if (!res.success) throw new Error(res.error || "Failed to update branch");
+  return (res.data as Branch) || null;
 };
 
-// Delete employee
-export const remove = async (req: Request, res: Response) => {
-  try {
-    const deleted = await service.deleteEmployee(req.params.id);
-    if (!deleted) {
-      return res.status(404).json({ success: false, error: "Employee not found" });
-    }
-    const out: SuccessResponse<{ id: string }> = { success: true, data: { id: req.params.id } };
-    return res.status(200).json(out);
-  } catch (err: any) {
-    const out: ErrorResponse = { success: false, error: err.message || "Server error" };
-    return res.status(500).json(out);
-  }
-};
-
-// Get employees by branch
-export const byBranch = async (req: Request, res: Response) => {
-  try {
-    const employees = await service.getEmployeesByBranch(req.params.branchId);
-    const out: SuccessResponse<typeof employees> = { success: true, data: employees };
-    return res.status(200).json(out);
-  } catch (err: any) {
-    const out: ErrorResponse = { success: false, error: err.message || "Server error" };
-    return res.status(500).json(out);
-  }
-};
-
-// Get employees by department
-export const byDepartment = async (req: Request, res: Response) => {
-  try {
-    const employees = await service.getEmployeesByDepartment(req.params.departmentId);
-    const out: SuccessResponse<typeof employees> = { success: true, data: employees };
-    return res.status(200).json(out);
-  } catch (err: any) {
-    const out: ErrorResponse = { success: false, error: err.message || "Server error" };
-    return res.status(500).json(out);
-  }
+export const deleteBranch = async (id: string): Promise<boolean> => {
+  const res = await branchRepo.delete(id);
+  if (!res.success) throw new Error(res.error || "Failed to delete branch");
+  return true;
 };

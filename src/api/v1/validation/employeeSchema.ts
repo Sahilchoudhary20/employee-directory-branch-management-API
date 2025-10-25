@@ -14,6 +14,6 @@ export const updateEmployeeSchema = Joi.object({
   position: Joi.string().min(2).max(100),
   department: Joi.string().min(2).max(100),
   email: Joi.string().email(),
-  phone: Joi.string().pattern(/^[0-9\-\s\+()]{5,20}$/),
+  phone: Joi.string().pattern(/^[0-9\-\s\+()]{3,20}$/).required(),
   branchId: Joi.alternatives().try(Joi.string(), Joi.number())
 }).min(1); // require at least one field to update

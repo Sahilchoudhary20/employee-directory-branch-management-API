@@ -1,5 +1,6 @@
 import { firestore } from "firebase-admin";
-import firebase from "../../../../config/firebaseConfig";
+import { db } from "../../../../config/firebaseConfig";
+
 
 export interface RepositoryResult<T> {
   success: boolean;
@@ -11,7 +12,7 @@ export class FirestoreRepository<T extends { id?: string | number }> {
   private collection: firestore.CollectionReference<firestore.DocumentData>;
 
   constructor(collectionName: string) {
-    this.collection = firebase.db.collection(collectionName);
+    this.collection = db.collection(collectionName);
   }
 
   async create(doc: Omit<T, "id">): Promise<RepositoryResult<T>> {
