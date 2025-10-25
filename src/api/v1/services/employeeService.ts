@@ -1,32 +1,44 @@
-import { employees, Employee } from "../../../data/employees";
+import { employeeRepo } from "../repositories/employeeRepository";
+import { Employee } from "../models/employeeModel";
 
-export const getAllEmployees = (): Employee[] => [...employees];
-
-export const getEmployeeById = (id: number): Employee | undefined => employees.find(e => e.id === id);
-
-export const createEmployee = (payload: Omit<Employee, "id">): Employee => {
-  const newId = Math.max(0, ...employees.map(e => e.id)) + 1;
-  const newEmployee: Employee = { id: newId, ...payload };
-  employees.push(newEmployee);
-  return newEmployee;
+export const createEmployee = async (payload: Omit<Employee, "id">) => {
+  const res = await employeeRepo.create(payload as Employee);
+  if (!res.success) throw new Error(res.error);
+  return res.data as Employee;
 };
 
-export const updateEmployee = (id: number, patch: Partial<Omit<Employee, "id">>): Employee | null => {
-  const idx = employees.findIndex(e => e.id === id);
-  if (idx === -1) return null;
-  employees[idx] = { ...employees[idx], ...patch };
-  return employees[idx];
+export const getAllEmployees = async (): Promise<Employee[]> => {
+  const res = await employeeRepo.getAll();
+  if (!res.success) throw new Error(res.error);
+  return (res.data as Employee[]) || [];
 };
 
-export const deleteEmployee = (id: number): boolean => {
-  const idx = employees.findIndex(e => e.id === id);
-  if (idx === -1) return false;
-  employees.splice(idx, 1);
+export const getEmployeeById = async (id: string) => {
+  const res = await employeeRepo.getById(id);
+  if (!res.success) throw new Error(res.error);
+  return res.data as Employee | null;
+};
+
+export const updateEmployee = async (id: string, patch: Partial<Employee>) => {
+  const res = await employeeRepo.update(id, patch);
+  if (!res.success) throw new Error(res.error);
+  return res.data as Employee;
+};
+
+export const deleteEmployee = async (id: string) => {
+  const res = await employeeRepo.delete(id);
+  if (!res.success) throw new Error(res.error);
   return true;
 };
 
-export const getEmployeesByBranch = (branchId: number): Employee[] =>
-  employees.filter(e => e.branchId === branchId);
+export const getEmployeesByBranch = async (branchId: string | number) => {
+  const res = await employeeRepo.findByField("branchId", branchId);
+  if (!res.success) throw new Error(res.error);
+  return (res.data as Employee[]) || [];
+};
 
-export const getEmployeesByDepartment = (department: string): Employee[] =>
-  employees.filter(e => e.department.toLowerCase() === department.toLowerCase());
+export const getEmployeesByDepartment = async (department: string) => {
+  const res = await employeeRepo.findByField("department", department);
+  if (!res.success) throw new Error(res.error);
+  return (res.data as Employee[]) || [];
+};
